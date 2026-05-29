@@ -24,167 +24,171 @@ jobs:
 
       - name: Crawl and mirror /cps/ directory
         run: |
-          node -e "
+          node << 'EOF'
           const puppeteer = require('puppeteer');
           const fs = require('fs');
           const path = require('path');
-          const { URL } = require('url');
 
-          const BASE_URL = 'https://creativepulse.42web.io/cps/';
-          const OUT_DIR = './cps';
+          const BASE = 'https://creativepulse.42web.io/cps/';
+          const OUT  = path.resolve('./cps');
           const visited = new Set();
-          const queue = [BASE_URL];
+          const queue   = [BASE];
 
-          function urlToFilePath(url) {
-            const u = new URL(url);
-            let p = u.pathname.replace(/^\/cps/, '');
-            if (!p || p.endsWith('/')) p += 'index.html';
-            if (!path.extname(p)) p += '.html';
-            return path.join(OUT_DIR, p);
+          function urlToFilePath(urlStr) {
+            // Strip base, normalize slashes
+            let rel = urlStr.replace(BASE, '');
+            rel = rel.split('?')[0].split('#')[0];
+            if (!rel || rel.endsWith('/')) rel += 'index.html';
+            if (!path.extname(rel)) rel += '.html';
+            return path.join(OUT, rel);
           }
 
-          function ensureDir(filePath) {
-            const dir = path.dirname(filePath);
-            fs.mkdirSync(dir, { recursive: true });
-          }
-
-          async function inlineAssets(page) {
-            // Inline all external CSS and woff2 fonts
+          async function inlineCSS(page) {
             await page.evaluate(async () => {
-              const links = Array.from(document.querySelectorAll('link[rel=\"stylesheet\"]'));
+              const links = [...document.querySelectorAll('link[rel="stylesheet"]')];
               for (const link of links) {
                 try {
-                  const resp = await fetch(link.href, { mode: 'cors' });
-                  if (!resp.ok) throw new Error('HTTP ' + resp.status);
-                  let css = await resp.text();
-                  const fontUrls = [...css.matchAll(/url\(['\"]?(https?:\/\/[^'\")]+\.woff2[^'\")]*)['\"]?\)/g)].map(m => m[1]);
-                  for (const fontUrl of fontUrls) {
+                  const r = await fetch(link.href, { mode: 'cors' });
+                  if (!r.ok) continue;
+                  let css = await r.text();
+                  // Inline woff2 fonts
+                  const fontUrls = [...css.matchAll(/url\(['"]?(https?:\/\/[^'")\s]+\.woff2[^'")\s]*)['"']?\)/g)].map(m => m[1]);
+                  for (const fu of fontUrls) {
                     try {
-                      const fr = await fetch(fontUrl);
-                      const buf = await fr.arrayBuffer();
-                      const b64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
-                      css = css.replace(fontUrl, 'data:font/woff2;base64,' + b64);
-                    } catch(fe) {
-                      console.warn('Could not inline font:', fontUrl);
-                    }
+                      const fr = await fetch(fu);
+                      const b64 = btoa(String.fromCharCode(...new Uint8Array(await fr.arrayBuffer())));
+                      css = css.replace(fu, 'data:font/woff2;base64,' + b64);
+                    } catch(_) {}
                   }
-                  const style = document.createElement('style');
-                  style.textContent = css;
-                  link.parentNode.replaceChild(style, link);
+                  const s = document.createElement('style');
+                  s.textContent = css;
+                  link.replaceWith(s);
                 } catch(e) {
-                  console.warn('Could not inline stylesheet:', link.href, e.message);
+                  console.warn('CSS inline failed:', link.href, e.message);
                 }
               }
             });
           }
 
-          async function rewriteLinks(page, currentUrl) {
-            // Rewrite all relative URLs to absolute, keep /cps/ internal links relative
-            await page.evaluate((baseUrl) => {
+          async function rewriteRelativeURLs(page) {
+            await page.evaluate(() => {
               const base = 'https://creativepulse.42web.io/cps/';
               document.querySelectorAll('[src],[href],[action]').forEach(el => {
                 ['src','href','action'].forEach(attr => {
-                  const val = el.getAttribute(attr);
-                  if (!val) return;
-                  if (val.startsWith('http') || val.startsWith('//') || val.startsWith('#') ||
-                      val.startsWith('mailto:') || val.startsWith('tel:') || val.startsWith('data:') ||
-                      val.startsWith('javascript:')) return;
-                  el.setAttribute(attr, base + val);
+                  const v = el.getAttribute(attr);
+                  if (!v) return;
+                  if (/^(https?:|\/\/|#|mailto:|tel:|data:|javascript:)/.test(v)) return;
+                  el.setAttribute(attr, base + v);
                 });
               });
-            }, currentUrl);
+            });
           }
 
-          async function collectLinks(page) {
-            // Find all internal /cps/ links on the page
-            return await page.evaluate(() => {
-              return Array.from(document.querySelectorAll('a[href]'))
-                .map(a => a.href)
-                .filter(href => href.startsWith('https://creativepulse.42web.io/cps/'));
-            });
+          async function getInternalLinks(page) {
+            return page.evaluate((base) => {
+              return [...document.querySelectorAll('a[href]')]
+                .map(a => a.href.split('#')[0].split('?')[0])
+                .filter(h => h.startsWith(base));
+            }, BASE);
           }
 
           (async () => {
+            console.log('Starting crawl of', BASE);
+            fs.mkdirSync(OUT, { recursive: true });
+
             const browser = await puppeteer.launch({
               args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
-
-            fs.mkdirSync(OUT_DIR, { recursive: true });
 
             while (queue.length > 0) {
               const url = queue.shift();
               if (visited.has(url)) continue;
               visited.add(url);
-
-              console.log('Processing:', url);
+              console.log(`\n[${visited.size}] Visiting: ${url}`);
 
               const page = await browser.newPage();
+              page.setDefaultNavigationTimeout(60000);
               await page.setViewport({ width: 1280, height: 800 });
               await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
               await page.setExtraHTTPHeaders({
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                 'Accept-Language': 'en-US,en;q=0.9',
-                'Cache-Control': 'no-cache',
               });
 
               try {
-                await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+                const response = await page.goto(url, { waitUntil: 'networkidle2' });
+                const status = response ? response.status() : 'no-response';
+                console.log('  Status:', status);
+
+                if (status === 404 || status === 403) {
+                  console.warn('  Skipping due to status', status);
+                  await page.close();
+                  continue;
+                }
+
                 await page.evaluate(() => document.fonts.ready);
                 await new Promise(r => setTimeout(r, 3000));
 
-                // Collect new internal links before modifying the DOM
-                const links = await collectLinks(page);
-                for (const link of links) {
-                  const clean = link.split('?')[0].split('#')[0];
-                  if (!visited.has(clean)) queue.push(clean);
-                }
+                // Collect links BEFORE rewriting URLs
+                const links = await getInternalLinks(page);
+                console.log('  Found links:', links.length);
+                links.forEach(l => { if (!visited.has(l)) queue.push(l); });
 
-                await inlineAssets(page);
-                await rewriteLinks(page, url);
+                await inlineCSS(page);
+                await rewriteRelativeURLs(page);
 
                 let html = await page.content();
 
                 // Inject AdSense
-                const adsTag = '<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9638774372490271\" crossorigin=\"anonymous\"><\/script>';
-                html = html.replace('</head>', adsTag + '\n</head>');
+                html = html.replace('</head>',
+                  '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9638774372490271" crossorigin="anonymous"></script>\n</head>'
+                );
 
                 const filePath = urlToFilePath(url);
-                ensureDir(filePath);
-                fs.writeFileSync(filePath, html);
-                console.log('Saved:', filePath, '(' + html.length + ' bytes)');
+                fs.mkdirSync(path.dirname(filePath), { recursive: true });
+                fs.writeFileSync(filePath, html, 'utf8');
+                console.log('  Saved:', filePath, `(${html.length} bytes)`);
 
               } catch(e) {
-                console.error('Failed to process', url, e.message);
-              } finally {
-                await page.close();
+                console.error('  ERROR on', url, '-', e.message);
               }
+
+              await page.close();
             }
 
-            // Create a root index.html that redirects to /cps/
+            await browser.close();
+
+            // Root redirect
             fs.writeFileSync('index.html',
-              '<!DOCTYPE html><html><head><meta http-equiv=\"refresh\" content=\"0;url=cps/\"><title>Redirecting...</title></head>' +
-              '<body><p>Redirecting to <a href=\"cps/\">cps/</a>...</p></body></html>'
+              '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=cps/index.html">' +
+              '<title>Redirecting...</title></head><body><a href="cps/index.html">Enter site</a></body></html>'
             );
 
-            console.log('Done. Pages mirrored:', visited.size);
-            await browser.close();
-          })().catch(e => { console.error(e); process.exit(1); });
-          "
+            console.log('\n=== Crawl complete. Pages visited:', visited.size, '===');
+
+            // List what was saved
+            const saved = fs.readdirSync(OUT);
+            console.log('Files in ./cps:', saved);
+
+          })().catch(e => { console.error('Fatal:', e); process.exit(1); });
+          EOF
 
       - name: Verify output
         run: |
+          echo "--- Directory listing ---"
+          find ./cps -type f | head -50
           COUNT=$(find ./cps -name '*.html' | wc -l)
           echo "HTML files mirrored: $COUNT"
           if [ "$COUNT" -lt 1 ]; then
             echo "ERROR: No files were mirrored"
             exit 1
           fi
-          echo "OK"
+          echo "OK: $COUNT pages mirrored"
 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add index.html cps/
-          git diff --cached --quiet || git commit -m "Mirror update $(date -u '+%Y-%m-%d %H:%M') - $COUNT pages"
+          git diff --cached --quiet && echo "No changes" || git commit -m "Mirror update $(date -u '+%Y-%m-%d %H:%M')"
           git push
