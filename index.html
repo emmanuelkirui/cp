@@ -786,7 +786,17 @@ if(typeof pdfjsLib!=='undefined'){
 </script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9638774372490271" crossorigin="anonymous"></script>
 </head>
-<body>
+<body><script>
+      function _absUrl(src) {
+        if (!src) return src;
+        if (src.match(/^https?:\/\//)) return src;
+        var m = src.match(/uploads\/([^?#\s]+)/);
+        if (m) return 'https://emmanuelkirui.github.io/uploads/' + m[1];
+        var a = document.createElement('a');
+        a.href = src;
+        return a.href;
+      }
+    </script>
 <!-- ══════════════════════════════════════════════
      ANIMATED BACKGROUND
 ══════════════════════════════════════════════ -->
@@ -808,7 +818,7 @@ if(typeof pdfjsLib!=='undefined'){
     <li><a href="#contact">Contact</a></li>
   </ul>
   <div class="nav-right">
-    <a href="https://emmanuelkirui.github.io/admin.html" class="nav-admin" title="Admin panel"><i class="fas fa-lock"></i> Admin</a>
+    <a href="https://emmanuelkirui.github.io/admin.html" class="nav-admin"><i class="fas fa-lock"></i> Admin</a>
     <button class="hamburger" onclick="document.getElementById('mobileNav').classList.toggle('open')">
       <i class="fas fa-bars"></i>
     </button>
