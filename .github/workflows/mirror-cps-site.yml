@@ -31,6 +31,7 @@ jobs:
           RUNNER_IP="${{ steps.runner_ip.outputs.ip }}"
           echo "Runner IP: $RUNNER_IP"
 
+          mkdir -p cps
           cat > cps/.htaccess << EOF
           Options +Indexes
 
@@ -134,6 +135,8 @@ jobs:
               await page.setExtraHTTPHeaders({
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                 'Accept-Language': 'en-US,en;q=0.9',
+                'Referer': 'https://emmanuelkirui.github.io',
+                'Origin': 'https://emmanuelkirui.github.io',
               });
 
               try {
@@ -189,9 +192,9 @@ jobs:
         run: |
           mkdir -p cps
           cat > cps/.htaccess << 'EOF'
-          Options +Indexes
+          Options -Indexes
 
-          # Block all public access to directory listing
+          # Block all public access
           Order Deny,Allow
           Deny from all
           EOF
