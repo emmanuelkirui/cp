@@ -1,0 +1,394 @@
+name: Mirror All Sites
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Puppeteer
+        run: npm install puppeteer
+
+      - name: Write mirror script
+        run: |
+          cat > mirror.js << 'EOF'
+          const puppeteer = require('puppeteer');
+          const fs   = require('fs');
+          const path = require('path');
+          const { execSync } = require('child_process');
+
+          const ORIGIN    = 'https://creativepulse.42web.io/cps/';
+          const GH_DOMAIN = 'https://emmanuelkirui.github.io';
+          const ADMIN_URL = ORIGIN + 'admin.php';
+          const ADMIN_PASS = process.env.ADMIN_PASSWORD;
+          const ADS_TAG   = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9638774372490271" crossorigin="anonymous"></script>';
+
+          const PAGES = [
+            { url: ORIGIN + 'port_kirui.php', output: 'index.html' },
+            { url: ORIGIN,                    output: 'home.html'  },
+          ];
+
+          const URL_MAP = {
+            [ORIGIN + 'port_kirui.php']: GH_DOMAIN + '/index.html',
+            [ORIGIN + 'liv.php']:        GH_DOMAIN + '/liv.html',
+            [ORIGIN + 'valmanu.php']:    GH_DOMAIN + '/valmanu.html',
+            [ORIGIN]:                    GH_DOMAIN + '/home.html',
+            [ORIGIN + 'admin.php']:      GH_DOMAIN + '/admin.html',
+          };
+
+          // ── STEP 1: Login, download data.json + ALL uploads ──────────────────
+          async function syncUploads(browser) {
+            console.log('\n=== Syncing uploads via admin panel ===');
+            const page = await browser.newPage();
+            await page.setViewport({ width: 1280, height: 900 });
+            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
+
+            console.log('Opening admin login...');
+            await page.goto(ADMIN_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+            await new Promise(r => setTimeout(r, 2000));
+
+            const pwSelector = 'input[type="password"]';
+            await page.waitForSelector(pwSelector, { timeout: 10000 });
+            await page.click(pwSelector);
+            await page.type(pwSelector, ADMIN_PASS, { delay: 60 });
+            await page.evaluate(() => {
+              const btn = document.querySelector('button[type="submit"]') || document.querySelector('button');
+              if (btn) btn.click();
+            });
+            await new Promise(r => setTimeout(r, 4000));
+            console.log('After login, URL:', page.url());
+
+            const cookies = await page.cookies();
+            const cookieStr = cookies.map(c => `${c.name}=${c.value}`).join('; ');
+
+            // ── 1a. Download data.json ────────────────────────────────────────
+            console.log('\n--- Downloading data.json ---');
+            try {
+              execSync(
+                `curl -sL --max-time 30 --cookie "${cookieStr}" -o "data.json" "${ORIGIN}data.json"`,
+                { timeout: 35000 }
+              );
+              const size = fs.existsSync('data.json') ? fs.statSync('data.json').size : 0;
+              if (size < 10) {
+                console.warn('data.json too small, removing.');
+                if (fs.existsSync('data.json')) fs.unlinkSync('data.json');
+              } else {
+                try {
+                  JSON.parse(fs.readFileSync('data.json', 'utf8'));
+                  console.log(`data.json OK (${(size/1024).toFixed(1)} KB)`);
+                } catch(e) {
+                  console.warn('data.json not valid JSON, removing.');
+                  fs.unlinkSync('data.json');
+                }
+              }
+            } catch(e) {
+              console.warn(`Failed to download data.json: ${e.message}`);
+            }
+
+            // ── 1b. Collect ALL upload filenames from every source ────────────
+
+            const allUrls = new Set();
+
+            // Source A: every uploads/ href on the admin page (links, src attrs)
+            const pageLinks = await page.evaluate((origin) => {
+              const found = [];
+              document.querySelectorAll('[href],[src],[data-pdf]').forEach(el => {
+                ['href','src','data-pdf'].forEach(attr => {
+                  const v = el.getAttribute(attr);
+                  if (!v) return;
+                  if (v.startsWith('http') && v.includes('uploads/')) found.push(v);
+                  else if (v.includes('uploads/')) found.push(origin + v.replace(/^\//, ''));
+                });
+              });
+              return found;
+            }, ORIGIN);
+            pageLinks.forEach(u => allUrls.add(u));
+            console.log(`Source A (admin page links): ${pageLinks.length}`);
+
+            // Source B: every uploads/ path in data.json (covers ALL sections:
+            //   profile.avatar, experience[].attachment, projects[].image,
+            //   certifications[].image/.pdf, testimonials[].pdf, files[].path)
+            if (fs.existsSync('data.json')) {
+              try {
+                const d = JSON.parse(fs.readFileSync('data.json', 'utf8'));
+                let count = 0;
+                function extractPaths(obj) {
+                  if (!obj) return;
+                  if (typeof obj === 'string' && obj.includes('uploads/')) {
+                    const url = obj.startsWith('http') ? obj : ORIGIN + obj.replace(/^\//, '');
+                    allUrls.add(url);
+                    count++;
+                  } else if (Array.isArray(obj)) {
+                    obj.forEach(extractPaths);
+                  } else if (typeof obj === 'object') {
+                    Object.values(obj).forEach(extractPaths);
+                  }
+                }
+                extractPaths(d);
+                console.log(`Source B (data.json paths): ${count}`);
+              } catch(e) {
+                console.warn('data.json path scan failed:', e.message);
+              }
+            }
+
+            // Source C: try scraping the uploads/ directory listing directly.
+            // Apache/nginx often serves an HTML index — parse all <a href> filenames.
+            console.log('\n--- Attempting uploads/ directory listing ---');
+            try {
+              const dirHtml = execSync(
+                `curl -sL --max-time 20 --cookie "${cookieStr}" "${ORIGIN}uploads/"`,
+                { timeout: 25000 }
+              ).toString();
+              // Match filenames linked in a directory index: href="filename.ext"
+              const dirMatches = [...dirHtml.matchAll(/href="([^"?#/]+\.(pdf|jpg|jpeg|png|gif|webp|doc|docx|pptx|xlsx|txt|zip))"/gi)];
+              let dirCount = 0;
+              for (const m of dirMatches) {
+                allUrls.add(ORIGIN + 'uploads/' + m[1]);
+                dirCount++;
+              }
+              console.log(`Source C (directory listing): ${dirCount} file(s) found`);
+            } catch(e) {
+              console.log('Directory listing not available (that is OK):', e.message);
+            }
+
+            console.log(`\nTotal unique upload files to download: ${allUrls.size}`);
+
+            // ── 1c. Download every file ────────────────────────────────────────
+            if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
+
+            for (const fileUrl of allUrls) {
+              const filename = path.basename(fileUrl.split('?')[0]);
+              const dest = `uploads/${filename}`;
+              try {
+                execSync(
+                  `curl -sL --max-time 60 --cookie "${cookieStr}" -o "${dest}" "${fileUrl}"`,
+                  { timeout: 65000 }
+                );
+                const size = fs.existsSync(dest) ? fs.statSync(dest).size : 0;
+                if (size < 500) {
+                  console.warn(`SKIP (${size}B too small): ${filename}`);
+                  if (fs.existsSync(dest)) fs.unlinkSync(dest);
+                } else {
+                  console.log(`Downloaded: ${filename} (${(size/1024).toFixed(1)} KB)`);
+                }
+              } catch(e) {
+                console.warn(`Failed: ${fileUrl} — ${e.message}`);
+              }
+            }
+
+            await page.close();
+            console.log('=== Uploads sync done ===\n');
+          }
+
+          // ── STEP 2: Mirror a page ────────────────────────────────────────────
+          async function mirrorPage(browser, url, output) {
+            const page = await browser.newPage();
+            await page.setViewport({ width: 1280, height: 800 });
+            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
+            await page.setExtraHTTPHeaders({
+              'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+              'Accept-Language': 'en-US,en;q=0.9',
+              'Cache-Control': 'no-cache',
+            });
+
+            console.log('Navigating to', url, '...');
+            await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
+            await page.evaluate(() => document.fonts.ready);
+            await new Promise(r => setTimeout(r, 6000));
+
+            // Inline external CSS + woff2 fonts as base64
+            await page.evaluate(async () => {
+              const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+              for (const link of links) {
+                try {
+                  const resp = await fetch(link.href, { mode: 'cors' });
+                  if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                  let css = await resp.text();
+                  const fontUrls = [...css.matchAll(/url\(['"]?(https?:\/\/[^'"')]+\.woff2[^'"')']*?)['"]?\)/g)].map(m => m[1]);
+                  for (const fontUrl of fontUrls) {
+                    try {
+                      const fr = await fetch(fontUrl);
+                      const buf = await fr.arrayBuffer();
+                      const b64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
+                      css = css.replace(fontUrl, 'data:font/woff2;base64,' + b64);
+                    } catch(fe) { console.warn('Font skip:', fontUrl); }
+                  }
+                  const style = document.createElement('style');
+                  style.textContent = css;
+                  link.parentNode.replaceChild(style, link);
+                } catch(e) { console.warn('CSS skip:', link.href, e.message); }
+              }
+            });
+
+            // ── REWRITE PHASE ─────────────────────────────────────────────────
+            await page.evaluate((urlMap, origin, ghDomain) => {
+
+              function uploadsFilename(val) {
+                const m = val.match(/uploads\/([^?#\s]+)/);
+                return m ? m[1] : null;
+              }
+
+              // 1. FIX ADMIN LINK — match raw attr AND browser-resolved .href
+              document.querySelectorAll('a[href]').forEach(el => {
+                const raw  = el.getAttribute('href') || '';
+                const full = el.href || '';
+                if (raw === 'admin.php' || raw.endsWith('/admin.php') ||
+                    full.endsWith('/admin.php')) {
+                  el.setAttribute('href', ghDomain + '/admin.html');
+                }
+              });
+
+              // 2. FIX data-pdf — bake in full GH Pages URL
+              //    PHP writes these as relative "uploads/abc.pdf" — _absUrl() on GH
+              //    would resolve them wrong, so we set the absolute URL right now.
+              document.querySelectorAll('[data-pdf]').forEach(el => {
+                const v = el.getAttribute('data-pdf') || '';
+                if (!v) return;
+                let fname = uploadsFilename(v);
+                if (!fname && !v.startsWith('http') && !v.startsWith('data:')) {
+                  fname = v.split('/').pop().split('?')[0];
+                }
+                if (fname) el.setAttribute('data-pdf', ghDomain + '/uploads/' + fname);
+              });
+
+              // 3. FIX ALL href / src / action
+              document.querySelectorAll('[src],[href],[action]').forEach(el => {
+                ['src','href','action'].forEach(attr => {
+                  const raw  = el.getAttribute(attr);
+                  const full = (attr === 'href' ? el.href : attr === 'src' ? el.src : null) || '';
+                  if (!raw) return;
+
+                  if (urlMap[raw])  { el.setAttribute(attr, urlMap[raw]);  return; }
+                  if (urlMap[full]) { el.setAttribute(attr, urlMap[full]); return; }
+
+                  const fnameRaw  = uploadsFilename(raw);
+                  const fnameFull = uploadsFilename(full);
+                  if (fnameRaw)  { el.setAttribute(attr, ghDomain + '/uploads/' + fnameRaw);  return; }
+                  if (fnameFull) { el.setAttribute(attr, ghDomain + '/uploads/' + fnameFull); return; }
+
+                  if (!raw.startsWith('http') && !raw.startsWith('//') && !raw.startsWith('#') &&
+                      !raw.startsWith('mailto:') && !raw.startsWith('tel:') &&
+                      !raw.startsWith('data:') && !raw.startsWith('javascript:')) {
+                    el.setAttribute(attr, origin + raw.replace(/^\//, ''));
+                  }
+                });
+              });
+
+              // 4. PATCH _absUrl so any uploads/ path remaining in inline JS resolves correctly
+              const fixScript = document.createElement('script');
+              fixScript.textContent = `
+                function _absUrl(src) {
+                  if (!src) return src;
+                  if (src.match(/^https?:\\/\\//)) return src;
+                  var m = src.match(/uploads\\/([^?#\\s]+)/);
+                  if (m) return '${ghDomain}/uploads/' + m[1];
+                  var a = document.createElement('a');
+                  a.href = src;
+                  return a.href;
+                }
+              `;
+              document.body.insertBefore(fixScript, document.body.firstChild);
+
+              // 5. DISABLE form actions pointing back to origin PHP
+              document.querySelectorAll('form[action]').forEach(form => {
+                const action = form.getAttribute('action') || '';
+                if (action.includes(origin) || action.endsWith('.php')) {
+                  form.setAttribute('action', '#');
+                  form.setAttribute('onsubmit', 'return false;');
+                }
+              });
+
+            }, URL_MAP, ORIGIN, GH_DOMAIN);
+
+            let html = await page.content();
+
+            // Post-process raw HTML: catch any surviving origin uploads/ paths
+            html = html.replace(
+              new RegExp(ORIGIN.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + 'uploads/([^"\'\\s>]+)', 'g'),
+              GH_DOMAIN + '/uploads/$1'
+            );
+            // Catch bare relative uploads/ paths still in attribute values
+            html = html.replace(/(['"\s=])uploads\/([^'"?\s>]+)/g, `$1${GH_DOMAIN}/uploads/$2`);
+
+            html = html.replace('</head>', ADS_TAG + '\n</head>');
+            console.log(output, 'size:', html.length, 'bytes');
+            fs.writeFileSync(output, html);
+            await page.close();
+          }
+
+          // ── MAIN ─────────────────────────────────────────────────────────────
+          (async () => {
+            const browser = await puppeteer.launch({
+              args: ['--no-sandbox', '--disable-setuid-sandbox']
+            });
+
+            await syncUploads(browser);
+
+            for (let i = 0; i < PAGES.length; i++) {
+              if (i > 0) {
+                console.log('Waiting 15s before next page...');
+                await new Promise(r => setTimeout(r, 15000));
+              }
+              let attempts = 0;
+              while (attempts < 3) {
+                try {
+                  await mirrorPage(browser, PAGES[i].url, PAGES[i].output);
+                  break;
+                } catch(e) {
+                  attempts++;
+                  console.warn(`Attempt ${attempts} failed for ${PAGES[i].url}:`, e.message);
+                  if (attempts < 3) {
+                    console.log('Retrying in 20s...');
+                    await new Promise(r => setTimeout(r, 20000));
+                  } else { throw e; }
+                }
+              }
+            }
+
+            await browser.close();
+            console.log('\nAll done.');
+          })().catch(e => { console.error(e); process.exit(1); });
+          EOF
+
+      - name: Run mirror script
+        env:
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        run: node mirror.js
+
+      - name: Verify outputs
+        run: |
+          for f in index.html home.html; do
+            SIZE=$(wc -c < $f)
+            echo "$f size: $SIZE bytes"
+            if [ "$SIZE" -lt 10000 ]; then
+              echo "ERROR: $f too small"; cat $f; exit 1
+            fi
+          done
+          echo "=== Uploads folder ==="
+          ls -lh uploads/ 2>/dev/null || echo "(empty)"
+          echo "=== data.json ==="
+          ls -lh data.json 2>/dev/null || echo "(not present)"
+          echo "=== Remaining origin URLs in index.html ==="
+          grep -o 'creativepulse[^"'\'']*' index.html | head -20 || echo "None (good)"
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html home.html uploads/ || true
+          git add data.json 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "Mirror update $(date -u '+%Y-%m-%d %H:%M')"
+          git push
