@@ -1,0 +1,1697 @@
+<html lang="en"><head><meta http-equiv="origin-trial" content="A7vZI3v+Gz7JfuRolKNM4Aff6zaGuT7X0mf3wtoZTnKv6497cVMnhy03KDqX7kBz/q/iidW7srW31oQbBt4VhgoAAACUeyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGUuY29tOjQ0MyIsImZlYXR1cmUiOiJEaXNhYmxlVGhpcmRQYXJ0eVN0b3JhZ2VQYXJ0aXRpb25pbmczIiwiZXhwaXJ5IjoxNzU3OTgwODAwLCJpc1N1YmRvbWFpbiI6dHJ1ZSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ=="><meta http-equiv="origin-trial" content="A7vZI3v+Gz7JfuRolKNM4Aff6zaGuT7X0mf3wtoZTnKv6497cVMnhy03KDqX7kBz/q/iidW7srW31oQbBt4VhgoAAACUeyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGUuY29tOjQ0MyIsImZlYXR1cmUiOiJEaXNhYmxlVGhpcmRQYXJ0eVN0b3JhZ2VQYXJ0aXRpb25pbmczIiwiZXhwaXJ5IjoxNzU3OTgwODAwLCJpc1N1YmRvbWFpbiI6dHJ1ZSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ=="><meta http-equiv="origin-trial" content="A7vZI3v+Gz7JfuRolKNM4Aff6zaGuT7X0mf3wtoZTnKv6497cVMnhy03KDqX7kBz/q/iidW7srW31oQbBt4VhgoAAACUeyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGUuY29tOjQ0MyIsImZlYXR1cmUiOiJEaXNhYmxlVGhpcmRQYXJ0eVN0b3JhZ2VQYXJ0aXRpb25pbmczIiwiZXhwaXJ5IjoxNzU3OTgwODAwLCJpc1N1YmRvbWFpbiI6dHJ1ZSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ=="><script src="https://apis.google.com/_/scs/abc-static/_/js/k=gapi.lb.en.ch0Jz-JlMrQ.O/m=auth/exm=ytsubscribe/rt=j/sv=1/d=1/ed=1/rs=AHpOoo_YD4KoV8fTh_kLhktsiThAm3yJ5A/cb=gapi.loaded_1?le=scs,fedcm_migration_mod" async=""></script><script src="https://apis.google.com/_/scs/abc-static/_/js/k=gapi.lb.en.ch0Jz-JlMrQ.O/m=ytsubscribe/rt=j/sv=1/d=1/ed=1/rs=AHpOoo_YD4KoV8fTh_kLhktsiThAm3yJ5A/cb=gapi.loaded_0?le=scs,fedcm_migration_mod" async=""></script><script type="text/javascript" async="" charset="utf-8" src="https://www.gstatic.com/recaptcha/releases/hsFBb1u5wWWWkWP4in1ua2cQ/recaptcha__en.js" crossorigin="anonymous" integrity="sha384-lIGkJy/ifBvYLcMC4DQHp6MP4+CdsSQsdz5dRsF5u+8bggv6r0m96jXICY4RQXSL"></script><script type="text/javascript" async="" charset="utf-8" src="https://www.gstatic.com/recaptcha/releases/hsFBb1u5wWWWkWP4in1ua2cQ/recaptcha__en.js" crossorigin="anonymous" integrity="sha384-lIGkJy/ifBvYLcMC4DQHp6MP4+CdsSQsdz5dRsF5u+8bggv6r0m96jXICY4RQXSL"></script><script type="text/javascript" async="" charset="utf-8" src="https://www.gstatic.com/recaptcha/releases/hsFBb1u5wWWWkWP4in1ua2cQ/recaptcha__en.js" crossorigin="anonymous" integrity="sha384-lIGkJy/ifBvYLcMC4DQHp6MP4+CdsSQsdz5dRsF5u+8bggv6r0m96jXICY4RQXSL"></script><script src="https://www.google.com/recaptcha/api.js?render=6LfcNYkqAAAAABmnN7g77k7ncCfmFD6DGXs230tG"></script><script>
+            grecaptcha.ready(function() {
+                grecaptcha.execute("6LfcNYkqAAAAABmnN7g77k7ncCfmFD6DGXs230tG", {action: "global"}).then(function(token) {
+                    document.getElementById("recaptchaToken").value = token;
+                });
+            });
+          </script><style>
+        #reconnect-notice {
+            position: fixed;
+            top: 0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.75rem 1rem;
+            border-radius: 0.25rem;
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 50000;
+            min-width: 240px;
+            max-width: 90vw;
+            font-size: clamp(0.875rem, 2vw, 1rem);
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            overflow: hidden;
+        }
+
+        .spinner {
+            width: clamp(1rem, 2vw, 1.25rem);
+            height: clamp(1rem, 2vw, 1.25rem);
+            min-width: 16px;
+            min-height: 16px;
+            border: 0.2rem solid #fff;
+            border-top: 0.2rem solid transparent;
+            border-radius: 50%;
+            display: none;
+            flex-shrink: 0;
+            order: 1;
+        }
+
+        .spinner.active {
+            display: block;
+            animation: spin 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite, glow 2s ease-in-out infinite;
+        }
+
+        .status-message {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: calc(90vw - 48px);
+            min-width: 0;
+            flex-grow: 1;
+            order: 2;
+        }
+
+        .fade-in {
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .fade-in.online { opacity: 0; }
+        .fade-in.offline { opacity: 1; background: #ff3860; }
+        .fade-in.slow { opacity: 1; background: #ffdd57; color: #000; }
+        .fade-in.error { opacity: 1; background: #ff3860; }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes glow {
+           0%, 100% {
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+           }
+           50% {
+            box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+         }
+        }
+
+        section.section #reconnect-notice {
+            top: 4rem;
+        }
+
+        .table-container #reconnect-notice {
+            position: fixed;
+            top: 0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: fit-content;
+            min-width: 240px;
+            max-width: 90%;
+        }
+
+        @media (max-width: 768px) {
+            #reconnect-notice {
+                top: 0;
+                padding: 0.5rem 0.75rem;
+                max-width: 100vw;
+                min-width: 180px; 
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+            }
+            
+            .spinner {
+                margin-right: 0.5rem;
+            }
+            
+            .status-message {
+                max-width: calc(85vw - 40px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            #reconnect-notice {
+                width: 100%;
+                max-width: 100vw;
+                min-width: 180px;
+                left: 0;
+                transform: none;
+                border-radius: 0;
+            }
+            
+            .status-message {
+                max-width: calc(85vw - 36px);
+            }
+            
+            .spinner {
+                min-width: 14px;
+                min-height: 14px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            #reconnect-notice {
+                min-width: 260px;
+                padding: 1rem 1.5rem;
+                z-index: 2000;
+            }
+            
+            .spinner {
+                min-width: 18px;
+                min-height: 18px;
+            }
+        }
+    </style><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9638774372490271" crossorigin="anonymous"></script>
+</head><body class="d-flex flex-column min-vh-100"><div id="reconnect-notice" class="fade-in online" style="display: none;"><div class="spinner" style="display: none;"></div><span class="status-message"></span></div><input type="hidden" id="recaptchaToken" name="g-recaptcha-response">
+
+<script src="https://www.google.com/recaptcha/api.js" async="" defer=""></script>
+<link rel="stylesheet" href="https://creativepulse.42web.io/cps/css/network-status.css">
+<script src="https://creativepulse.42web.io/cps/network-status.js"></script>
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>CPS</title>
+		<meta name="description" content="Creative Pulse Solutions">        
+        <meta name="author" content="Antonov_WEB">
+		<meta name="generator" content="phpBlog">
+        <meta name="robots" content="index, follow, all">
+        <link rel="shortcut icon" href="https://creativepulse.42web.io/cps/assets/img/favicon.png" type="image/png">
+
+        <!-- Bootstrap 5 -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+		<!-- Font Awesome 5 -->
+        <link href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" type="text/css" rel="stylesheet">
+
+        <!-- Bootstrap 5 Theme -->
+        <link href="https://bootswatch.com/5/journal/bootstrap.min.css" type="text/css" rel="stylesheet">
+			<!-- jQuery -->
+		<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+		
+		<!-- phpBlog styles, scripts -->
+        <link href="https://creativepulse.42web.io/cps/assets/css/phpblog.css" rel="stylesheet">
+		<script src="https://creativepulse.42web.io/cps/assets/js/phpblog.js"></script>
+	
+        <style>
+        </style>
+        
+<meta name="google-site-verification" content="LPHbheYB3lmo7ggbRuspHPClYgB9FLXPDoRB7O1Bv7E">
+
+
+
+
+
+
+	
+	<header class="py-3 border-bottom bg-primary">
+		<div class="container-fluid d-flex flex-wrap justify-content-center">
+			<a href="http://creativepulse.42web.io/cps" class="d-flex align-items-center text-white mb-3 mb-md-0 me-md-auto text-decoration-none">
+				<span class="fs-4"><b><i class="far fa-newspaper"></i> CPS</b></span>
+			</a>
+			
+			<form class="col-12 col-lg-auto mb-3 mb-lg-0" action="https://creativepulse.42web.io/cps/search" method="GET">
+				<div class="input-group">
+					<input type="search" class="form-control" placeholder="Search" name="q" value="" required="">
+					<span class="input-group-btn">
+						<button class="btn btn-dark" type="submit"><i class="fa fa-search"></i></button>
+					</span>
+
+				</div>
+			</form>   
+    </div>
+		
+    
+
+            <a href="https://creativepulse.42web.io/cps/login" class="btn btn-primary px-2">
+            <i class="fas fa-sign-in-alt"></i> Sign In &nbsp;|&nbsp; Register
+        </a>
+
+
+	</header>
+	
+	<nav class="navbar nav-underline navbar-expand-lg py-2 bg-light border-bottom">
+		<div class="container-fluid">
+			<button class="navbar-toggler mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span> Navigation
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto">
+<li class="nav-item"><a href="https://creativepulse.42web.io/cps/index" class="nav-link px-2 active"><i class="fa fa-home"></i> Home</a></li><li class="nav-item"><a href="https://creativepulse.42web.io/cps/page?name=about" class="nav-link px-2"><i class="fa fa-info-circle"></i> About</a></li><li class="nav-item"><a href="https://creativepulse.42web.io/cps/gallery" class="nav-link px-2"><i class="fa fa-images"></i> Gallery</a></li><li class="nav-item dropdown"><a href="https://creativepulse.42web.io/cps/blog" class="nav-link dropdown-toggle px-2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-list"></i> Posts </a><ul class="dropdown-menu overflow-auto" style="max-height: 300px;"><li><a class="dropdown-item" href="https://creativepulse.42web.io/cps/blog">View all posts</a></li><li><a class="dropdown-item" href="https://creativepulse.42web.io/cps/category?name=graphic-design"><i class="fas fa-chevron-right"></i> Graphic Design</a></li><li><a class="dropdown-item" href="https://creativepulse.42web.io/cps/category?name=site-news"><i class="fas fa-chevron-right"></i> Site News</a></li><li><a class="dropdown-item" href="https://creativepulse.42web.io/cps/category?name=videos"><i class="fas fa-chevron-right"></i> Videos</a></li></ul></li><li class="nav-item"><a href="https://creativepulse.42web.io/cps/contact" class="nav-link px-2"><i class="fa fa-envelope"></i> Contact</a></li><li class="nav-item"><a href="https://creativepulse.42web.io/cps/page?name=tc" class="nav-link px-2"><i class="fa fa-columns"></i> T&amp;C</a></li><li class="nav-item"><a href="https://creativepulse.42web.io/cps/page?name=privacy-policy" class="nav-link px-2"><i class="fa fa-columns"></i> Privacy Policy</a></li><li class="nav-item"><a href="https://creativepulse.42web.io/cps/checkstatus" class="nav-link px-2"><i class="fa fa-check"></i> Check Status</a></li><li class="nav-item"><a href="https://creativepulse.42web.io/cps/footballnews" class="nav-link px-2"><i class="fa fa-futbol"></i> Football News</a></li><li class="nav-item"><a href="https://creativepulse.42web.io/cps/fourthwall_shop" class="nav-link px-2"><i class="fa fas fa-store"></i> Shop</a></li><li class="nav-item"><a href="https://creativepulse.42web.io/cps/service_request" class="nav-link px-2"><i class="fa fa fa-clipboard-list"></i> Services</a></li>
+				</ul>
+				<ul class="navbar-nav d-flex">
+      
+					<style>
+                    @media (max-width: 768px) {
+    .dropdown-menu {
+        position: static;
+        float: none;
+        width: 100%;
+        max-height: 300px; /* Allows scrolling if menu items exceed viewport height */
+        overflow-y: auto;
+        margin: 0;
+        padding: 0;
+        border: none;
+        background-color: #f8f9fa; /* Matches Bootstrap light theme */
+    }
+
+    .dropdown-item {
+        white-space: normal; /* Wrap long text */
+    }
+
+    .nav-item {
+        width: 100%;
+    }
+
+    .nav-link {
+        text-align: left;
+    }
+}
+
+@media (min-width: 769px) {
+    .dropdown-menu {
+        max-height: 400px; /* Scrollable dropdown for desktops */
+        overflow-y: auto;
+    }
+}
+
+ /* General styling for the navigation items */
+.nav-item {
+  margin-right: 15px; /* Spacing between items */
+  font-size: 16px; /* Default font size */
+  font-weight: 500; /* Slightly bold for visibility */
+  text-transform: uppercase; /* Consistent text styling */
+}
+
+/* Styling for the navbar */
+.navbar {
+  display: flex;
+  flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+  justify-content: space-between; /* Spread out items */
+  align-items: center; /* Vertically align items */
+  padding: 10px 20px; /* Add spacing inside the navbar */
+  background-color: #343a40; /* Dark background for a professional look */
+  color: #00008B; /* White text for contrast */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Hover and active states for nav items */
+.nav-item a {
+  color: #00008B; /* Default link color */
+  text-decoration: none; /* Remove underline */
+  transition: color 0.3s ease; /* Smooth hover effect */
+}
+
+.nav-item a:hover, .nav-item a:active {
+  color: #800080; /* Highlight color on hover */
+}
+
+/* Button styling */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px; /* Consistent padding */
+  border-radius: 4px; /* Rounded corners */
+  background-color: #f8c34a; /* Primary button color */
+  color: #343a40; /* Dark text for contrast */
+  text-transform: uppercase; /* Uniform button text */
+  font-weight: 600; /* Make buttons stand out */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.btn:hover {
+  background-color: #e8b127; /* Slightly darker hover color */
+}
+
+/* Responsive design for small screens */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    padding: 15px; /* Add spacing for small screens */
+  }
+
+  .nav-item {
+    margin-right: 0; /* Remove margin on small screens */
+    margin-bottom: 10px; /* Add spacing between stacked items */
+    font-size: 14px; /* Slightly smaller font size */
+  }
+}
+
+/* Responsive design for extra small screens */
+@media (max-width: 480px) {
+  .btn {
+    padding: 8px 12px; /* Adjust button padding */
+    font-size: 13px; /* Smaller font for better fit */
+  }
+
+  .nav-item {
+    font-size: 13px; /* Adjust font size for extra small screens */
+  }
+
+  .navbar {
+    padding: 10px; /* Compact spacing */
+  }
+}
+</style>
+
+
+
+
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+    
+    <div class="pt-2 bg-light">
+        <div class="container-fluid d-flex justify-content-center">
+            <div class="col-md-2">
+                <h5>
+                    <span class="badge bg-danger">
+                        <i class="fa fa-info-circle"></i> Latest: 
+                    </span>
+                </h5>
+            </div>
+            <div class="col-md-10">
+                <marquee behavior="scroll" direction="right" scrollamount="6">
+                    
+<a href="https://creativepulse.42web.io/cps/post?name=designs--77027">Designs </a>
+        &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://creativepulse.42web.io/cps/post?name=mclwsh-52641">MCLWSH</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://creativepulse.42web.io/cps/post?name=briars-18817">BRIARS</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://creativepulse.42web.io/cps/post?name=designs--52616">Designs </a>
+        &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://creativepulse.42web.io/cps/post?name=designs-57073">Designs</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://creativepulse.42web.io/cps/post?name=designs-62578">Designs</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;                </marquee>
+            </div>
+        </div>
+    </div>
+	
+    <div class="container-fluid mt-3">
+	
+
+		<div class="card mb-3">
+			<div class="card-header">🌟 Welcome to Creative Pulse Solutions | ⚽ Predictions, 🎨 Designs &amp; 🎶 Solutions 🚀</div>
+			<div class="card-body">
+				<p>🎉 Welcome to Creative Pulse Solutions!</p>
+
+<p>Your one-stop destination for ⚽ football predictions, 🎨 creative designs, 🎶 music production, and 💡 innovative digital solutions. Explore now and transform your ideas into reality! 🚀</p>
+
+			</div>
+		</div>
+		
+        <div class="row">
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Pulse Solutions</title>
+
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://creativepulse.42web.io/cps/assets/img/favicon.png" type="image/png">
+    
+    <!-- Optional: Apple Touch Icon for iOS -->
+    <link rel="apple-touch-icon" href="https://creativepulse.42web.io/cps/assets/img/favicon.png">
+
+   
+
+<!-- Loader HTML -->
+
+    
+<!-- Preloader 
+<div id="preloader" class="preloader">
+    <div class="spinner"></div>
+</div> -->
+
+<div class="col-md-8 mb-3">
+
+    <!-- Header Ad Section -->
+    <!-- Section for Generic Content -->
+<div class="ad-container" style="margin: 20px 0; text-align: center;">
+  <!-- Dynamic Content Block -->
+  <script type="text/javascript">
+    atOptions = {
+      'key' : '6c330ed2db899b8867378fb54deaa881',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//axisdoctrine.com/6c330ed2db899b8867378fb54deaa881/invoke.js"></script>
+  <p class="ad-text">Advertisement</p>
+</div>
+
+
+  <!-- First Ad Container 
+<div class="ad-container" data-ad-src="//axisdoctrine.com/71/c6/8b/71c68b4d81e3514e85d49298348906f9.js">
+    <button class="close-btn" onclick="closeAd(this)">×</button>
+    <div class="ad-content"></div>
+    <p class="ad-text">Advertisement</p>
+</div> -->
+
+<!-- Second Ad Container 
+<div class="ad-container" data-ad-src="//axisdoctrine.com/e2/f0/96/e2f0969a089b730c71dffdac4a5a9b77.js">
+    <button class="close-btn" onclick="closeAd(this)">×</button>
+    <div class="ad-content"></div>
+    <p class="ad-text">Advertisement</p>
+</div>
+
+<script>
+    // Function to close an ad
+    function closeAd(button) {
+        const adContainer = button.closest(".ad-container");
+        if (adContainer) {
+            adContainer.style.display = "none";
+            console.log("Ad closed.");
+        }
+    }
+
+    // Dynamically load ad scripts into their respective containers
+    function loadAds() {
+        const adContainers = document.querySelectorAll(".ad-container");
+        adContainers.forEach(container => {
+            const adSrc = container.getAttribute("data-ad-src");
+            const adContent = container.querySelector(".ad-content");
+
+            if (adSrc && adContent) {
+                const script = document.createElement("script");
+                script.type = "text/javascript";
+                script.src = adSrc;
+                adContent.appendChild(script);
+            }
+        });
+    }
+
+    // Add a global click event listener
+    document.addEventListener("click", (event) => {
+        // Check if the click is outside the ad-container
+        const isInsideAd = event.target.closest(".ad-container");
+        if (!isInsideAd) {
+            event.preventDefault(); // Prevent default behavior (e.g., following links)
+            event.stopPropagation(); // Stop event propagation
+            console.log("Click outside ad-container ignored.");
+        }
+    });
+
+    // Load ads after the DOM is fully loaded
+    document.addEventListener("DOMContentLoaded", loadAds);
+</script>
+
+ -->
+
+
+
+   
+    <!-- Fourth Ad Container (Async Script with Div) -->
+    <div class="ad-container">
+        <script async="async" data-cfasync="false" src="//axisdoctrine.com/1f101e7cda51306a777ae55035efee2f/invoke.js"></script>
+        <div id="container-1f101e7cda51306a777ae55035efee2f"></div>
+         <p class="ad-text">Advertisement</p>
+    </div>
+   
+    
+    
+    <!-- Subscribe Button Section -->
+<div class="text-center my-4">
+    <a href="https://creativepulse.42web.io/cps/payment_page.php" class="btn btn-primary btn-lg">Subscribe Now with Paypal</a>
+</div>
+
+    <!-- Carousel for Featured Posts -->
+        <div id="carouselExampleCaptions" class="col-md-12 carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Designs "></button><button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="MCLWSH"></button><button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="BRIARS"></button><button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Designs "></button><button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="4" aria-label="Designs "></button><button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="5" aria-label="Designs "></button><button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="6" aria-label="Designs"></button><button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="7" aria-label="Graphics "></button>        </div>
+        <div class="carousel-inner rounded">
+        
+            <div class="carousel-item active">
+                <a href="https://creativepulse.42web.io/cps/post?name=designs--77027"><img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Designs " class="d-block w-100" height="400"></a>
+                <div class="carousel-caption d-md-block">
+                    <h5>
+                        <a href="https://creativepulse.42web.io/cps/post?name=designs--77027" class="text-light" style="text-shadow: 1px 1px black;">Designs </a>
+                    </h5>
+                    <p class="text-light" style="text-shadow: 1px 1px black;">
+                        <i class="fas fa-calendar"></i> 04.01.2025, 12:01
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <a href="https://creativepulse.42web.io/cps/post?name=mclwsh-52641"><img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="MCLWSH" class="d-block w-100" height="400"></a>
+                <div class="carousel-caption d-md-block">
+                    <h5>
+                        <a href="https://creativepulse.42web.io/cps/post?name=mclwsh-52641" class="text-light" style="text-shadow: 1px 1px black;">MCLWSH</a>
+                    </h5>
+                    <p class="text-light" style="text-shadow: 1px 1px black;">
+                        <i class="fas fa-calendar"></i> 04.01.2025, 11:57
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <a href="https://creativepulse.42web.io/cps/post?name=briars-18817"><img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="BRIARS" class="d-block w-100" height="400"></a>
+                <div class="carousel-caption d-md-block">
+                    <h5>
+                        <a href="https://creativepulse.42web.io/cps/post?name=briars-18817" class="text-light" style="text-shadow: 1px 1px black;">BRIARS</a>
+                    </h5>
+                    <p class="text-light" style="text-shadow: 1px 1px black;">
+                        <i class="fas fa-calendar"></i> 04.01.2025, 11:55
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <a href="https://creativepulse.42web.io/cps/post?name=designs--25748"><img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Designs " class="d-block w-100" height="400"></a>
+                <div class="carousel-caption d-md-block">
+                    <h5>
+                        <a href="https://creativepulse.42web.io/cps/post?name=designs--25748" class="text-light" style="text-shadow: 1px 1px black;">Designs </a>
+                    </h5>
+                    <p class="text-light" style="text-shadow: 1px 1px black;">
+                        <i class="fas fa-calendar"></i> 04.01.2025, 09:42
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <a href="https://creativepulse.42web.io/cps/post?name=designs--65285"><img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Designs " class="d-block w-100" height="400"></a>
+                <div class="carousel-caption d-md-block">
+                    <h5>
+                        <a href="https://creativepulse.42web.io/cps/post?name=designs--65285" class="text-light" style="text-shadow: 1px 1px black;">Designs </a>
+                    </h5>
+                    <p class="text-light" style="text-shadow: 1px 1px black;">
+                        <i class="fas fa-calendar"></i> 04.01.2025, 09:39
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <a href="https://creativepulse.42web.io/cps/post?name=designs--53117"><img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Designs " class="d-block w-100" height="400"></a>
+                <div class="carousel-caption d-md-block">
+                    <h5>
+                        <a href="https://creativepulse.42web.io/cps/post?name=designs--53117" class="text-light" style="text-shadow: 1px 1px black;">Designs </a>
+                    </h5>
+                    <p class="text-light" style="text-shadow: 1px 1px black;">
+                        <i class="fas fa-calendar"></i> 04.01.2025, 09:37
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <a href="https://creativepulse.42web.io/cps/post?name=designs-29778"><img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Designs" class="d-block w-100" height="400"></a>
+                <div class="carousel-caption d-md-block">
+                    <h5>
+                        <a href="https://creativepulse.42web.io/cps/post?name=designs-29778" class="text-light" style="text-shadow: 1px 1px black;">Designs</a>
+                    </h5>
+                    <p class="text-light" style="text-shadow: 1px 1px black;">
+                        <i class="fas fa-calendar"></i> 04.01.2025, 09:36
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <a href="https://creativepulse.42web.io/cps/post?name=graphics--41635"><img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Graphics " class="d-block w-100" height="400"></a>
+                <div class="carousel-caption d-md-block">
+                    <h5>
+                        <a href="https://creativepulse.42web.io/cps/post?name=graphics--41635" class="text-light" style="text-shadow: 1px 1px black;">Graphics </a>
+                    </h5>
+                    <p class="text-light" style="text-shadow: 1px 1px black;">
+                        <i class="fas fa-calendar"></i> 28.11.2024, 17:17
+                    </p>
+                </div>
+            </div>        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+        <!-- Middle Ad Section -->
+<div class="ad-container text-center my-4" style="text-align: center; margin: 20px 0;">
+  <script type="text/javascript">
+    atOptions = {
+        'key' : '6c330ed2db899b8867378fb54deaa881',
+        'format' : 'iframe',
+        'height' : 50,
+        'width' : 320,
+        'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//axisdoctrine.com/6c330ed2db899b8867378fb54deaa881/invoke.js"></script>
+   <p class="ad-text">Advertisement</p>
+</div>
+ <!-- Floating Chat Button -->
+<div id="chatButton" class="chat-button" style="opacity: 0;">
+    <button onclick="toggleChat()">Chat with us</button>
+</div>
+
+<!-- WhatsApp-style Chatbot UI (Initially Hidden) -->
+<div id="chatContainer" class="chatbot-container my-4" style="display: none;">
+    <h5>Chat with our AI</h5>
+    <div id="chatbox" class="border p-3" style="max-height: 400px; overflow-y: scroll; background-color: #f8f9fa;">
+        <div id="messages">
+                    </div>
+    </div>
+        <form id="chatForm" method="POST">
+        <div class="input-group mt-3">
+            <input type="text" class="form-control" name="user_message" id="userMessage" placeholder="Type your message..." required="">
+            <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+
+        <!-- Google reCAPTCHA v2 -->
+        <div class="g-recaptcha" data-sitekey="6Les-YkqAAAAAKbEePt6uo07ZvJAw5-_4ProGXtN"></div> <!-- Dynamically get the site key -->
+    </form>
+</div>
+
+<script src="https://www.google.com/recaptcha/api.js" async="" defer=""></script>
+
+<script>
+    // Scroll chatbox to the bottom when new message is added
+    function scrollToBottom() {
+        const chatbox = document.getElementById('chatbox');
+        chatbox.scrollTop = chatbox.scrollHeight;
+    }
+
+    // Toggle the chat visibility
+    function toggleChat() {
+        const chatContainer = document.getElementById('chatContainer');
+        if (chatContainer.style.display === 'none') {
+            chatContainer.style.display = 'block'; // Show chat container
+        } else {
+            chatContainer.style.display = 'none'; // Hide chat container
+        }
+    }
+
+    // Handle form submission
+    document.getElementById('chatForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const userMessage = document.getElementById('userMessage').value;
+        if (userMessage.trim() !== '') {
+            // Get the logged-in user's name (or "Guest" if not logged in)
+            const userName = 'Guest';
+            
+            // Display the user's message with their name
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.classList.add('message', 'user-message');
+            userMessageDiv.innerHTML = '<strong>' + userName + ':</strong> ' + userMessage;
+            document.getElementById('messages').appendChild(userMessageDiv);
+
+            // Scroll to the bottom after new message is added
+            scrollToBottom();
+
+            // Send the message to the server and get the response from the chatbot
+            fetch('', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    user_message: userMessage
+                }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.text())
+            .then(response => {
+                const botMessage = response.match(/botMessage: "([^"]+)"/);
+                if (botMessage) {
+                    // Display the bot's response with "CPS" as the sender name
+                    const botMessageDiv = document.createElement('div');
+                    botMessageDiv.classList.add('message', 'bot-message');
+                    botMessageDiv.innerHTML = '<strong>CPS:</strong> ' + botMessage[1];
+                    document.getElementById('messages').appendChild(botMessageDiv);
+
+                    // Scroll to the bottom after bot's message is added
+                    scrollToBottom();
+                }
+            });
+        }
+
+        // Clear the input field after message is sent
+        document.getElementById('userMessage').value = '';
+    });
+</script>
+
+<!-- Custom CSS -->
+<style>
+ .ad-container {
+    width: 100%;
+    max-width: 728px;
+    margin: 20px auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    box-sizing: border-box;
+    overflow-x: auto;
+    white-space: nowrap;
+    position: relative;
+    z-index: 9999;
+}
+
+.ad-text {
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+    margin-top: 5px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: none;
+    background: red;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .ad-container {
+        max-width: 100%;
+        margin: 10px 0;
+        padding: 5px;
+    }
+
+    .ad-text {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ad-container {
+        padding: 5px;
+    }
+
+    .ad-text {
+        font-size: 10px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .ad-container {
+        max-width: 728px;
+        margin: 20px auto;
+    }
+}
+
+
+
+/* Preloader Styles */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Thinner Attractive Spinner with Gradient and Smooth Rotation */
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.2);  /* Faded background */
+    border-top: 4px solid #3498db; /* Bright color for the spinner */
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 1.5s linear infinite, glow 1.5s ease-in-out infinite;
+}
+
+/* Rotation animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Glow effect for added appeal */
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 5px #3498db, 0 0 15px #3498db, 0 0 20px #3498db, 0 0 30px #3498db;
+    }
+    50% {
+        box-shadow: 0 0 10px #3498db, 0 0 25px #3498db, 0 0 35px #3498db, 0 0 50px #3498db;
+    }
+    100% {
+        box-shadow: 0 0 5px #3498db, 0 0 15px #3498db, 0 0 20px #3498db, 0 0 30px #3498db;
+    }
+}
+
+
+   .chat-button button {
+      background-color: #25D366;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .chat-button {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 9999;
+    }
+
+    .hidden {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+
+   .chatbot-container {
+    width: 100%;
+    max-width: 600px;
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    z-index: 9999;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#chatbox {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+    #chatbox {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 10px;
+        height: 400px;
+        max-height: 400px;
+        overflow-y: auto;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .message {
+        display: block;
+        max-width: 70%;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 15px;
+        font-size: 14px;
+        word-wrap: break-word; /* Ensures long messages break into new lines */
+    }
+
+    .user-message {
+        background-color: #dcf8c6;
+        align-self: flex-start;
+        margin-left: 5%;
+        margin-right: 0;
+    }
+
+    .bot-message {
+        background-color: #ffffff;
+        align-self: flex-end;
+        margin-left: 0;
+        margin-right: 5%;
+    }
+
+    .input-group input {
+        border-radius: 20px 0 0 20px;
+    }
+
+    .input-group button {
+        border-radius: 0 20px 20px 0;
+    }
+    @media (max-width: 768px) {
+    .chat-button {
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .chat-button button {
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+
+    .chatbot-container {
+        width: 90%; /* Reduce width for mobile */
+        bottom: 70px;
+        right: 5%;
+    }
+
+    #chatbox {
+        height: 300px; /* Adjust height for smaller screens */
+    }
+
+    .message {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .chat-button button {
+        padding: 5px 10px;
+        font-size: 10px;
+    }
+
+    .chatbot-container {
+        width: 95%;
+        bottom: 60px;
+        right: 2.5%;
+    }
+
+    #chatbox {
+        height: 250px;
+    }
+
+    .message {
+        font-size: 10px;
+    }
+}
+
+ #video-controls {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    #video-controls button {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin: 0 10px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+    }
+
+    #video-controls button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    #nav-message {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+    }
+</style>
+
+<div style="background-color: #f9f9f9; padding: 20px; text-align: center; margin: 20px 0; border: 1px solid #ccc; border-radius: 10px;">
+  <!-- YouTube Banner Section -->
+  <h2 style="color: #ff0000; font-family: Arial, sans-serif;">Subscribe to Our YouTube Channel</h2>
+  <p>Stay updated with our latest videos on graphics, motion design, and predictions!</p>
+  <a href="https://www.youtube.com/@emmanuelkirui9043?sub_confirmation=1" target="_blank" style="text-decoration: none;">
+    <button style="background-color: #ff0000; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; cursor: pointer;">
+      Subscribe Now
+    </button>
+  </a>
+
+  <!-- YouTube Subscribe Widget Button -->
+  <div class="text-center my-4">
+      <script src="https://apis.google.com/js/platform.js" gapi_processed="true"></script>
+      <div style="position: absolute; width: 450px; left: -10000px;" id="___ytsubscribe_0"><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position:absolute;top:-10000px;width:450px;margin:0px;border-style:none" tabindex="0" vspace="0" width="100%" id="I0_1780088263883" name="I0_1780088263883" src="https://www.youtube.com/subscribe_embed?usegapi=1&amp;channelid=UCowmIx_sYZ6qi8PtaAtCGUg&amp;layout=full&amp;count=default&amp;origin=https%3A%2F%2Fcreativepulse.42web.io&amp;gsrc=3p&amp;ic=1&amp;jsh=m%3B%2F_%2Fscs%2Fabc-static%2F_%2Fjs%2Fk%3Dgapi.lb.en.ch0Jz-JlMrQ.O%2Fd%3D1%2Frs%3DAHpOoo_YD4KoV8fTh_kLhktsiThAm3yJ5A%2Fm%3D__features__#_methods=onPlusOne%2C_ready%2C_close%2C_open%2C_resizeMe%2C_renderstart%2Concircled%2Cdrefresh%2Cerefresh%2Conload&amp;id=I0_1780088263883&amp;_gfid=I0_1780088263883&amp;parent=https%3A%2F%2Fcreativepulse.42web.io&amp;pfname=&amp;rpctoken=40528132" data-gapiattached="true"></iframe></div><div class="g-ytsubscribe" data-channelid="UCowmIx_sYZ6qi8PtaAtCGUg" data-layout="full" data-count="default" data-gapiscan="true" data-onload="true" data-gapistub="true"></div>
+  </div>
+
+  <!-- Latest Videos Section -->
+  <div id="youtube-videos" style="margin-top: 30px;">
+    <h3>Most Viewed Videos</h3>
+    <div id="video-list" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;"><div style="width: 200px;">
+        <a href="https://www.youtube.com/watch?v=ekVEwkWjhVc" target="_blank" style="text-decoration: none; color: inherit;">
+          <img src="https://i.ytimg.com/vi/ekVEwkWjhVc/mqdefault.jpg" alt="Mathias Walichupa - Nitashinda (Lyrics Video)" style="width: 100%; border-radius: 5px;">
+          <p style="font-size: 14px; margin: 5px 0;">Mathias Walichupa - Nitashinda (Lyrics Video)</p>
+        </a>
+      </div><div style="width: 200px;">
+        <a href="https://www.youtube.com/watch?v=gzGinAKZxyQ" target="_blank" style="text-decoration: none; color: inherit;">
+          <img src="https://i.ytimg.com/vi/gzGinAKZxyQ/mqdefault.jpg" alt="Tsunami Beiby  X Billon - Hapa Ni Wapi(Halleluyah) (Official Lyrics Video)" style="width: 100%; border-radius: 5px;">
+          <p style="font-size: 14px; margin: 5px 0;">Tsunami Beiby  X Billon - Hapa Ni Wapi(Halleluyah) (Official Lyrics Video)</p>
+        </a>
+      </div><div style="width: 200px;">
+        <a href="https://www.youtube.com/watch?v=5gFDzNR5obc" target="_blank" style="text-decoration: none; color: inherit;">
+          <img src="https://i.ytimg.com/vi/5gFDzNR5obc/mqdefault.jpg" alt="Jux Ft Diamond Platnumz  - Enjoy (Lyrics Video)" style="width: 100%; border-radius: 5px;">
+          <p style="font-size: 14px; margin: 5px 0;">Jux Ft Diamond Platnumz  - Enjoy (Lyrics Video)</p>
+        </a>
+      </div><div style="width: 200px;">
+        <a href="https://www.youtube.com/watch?v=9Ng2lz6CFsk" target="_blank" style="text-decoration: none; color: inherit;">
+          <img src="https://i.ytimg.com/vi/9Ng2lz6CFsk/mqdefault.jpg" alt="Enisa, Wenzl Mcgowen  - Disco Cone (Take It High)(Lyrics Video)" style="width: 100%; border-radius: 5px;">
+          <p style="font-size: 14px; margin: 5px 0;">Enisa, Wenzl Mcgowen  - Disco Cone (Take It High)(Lyrics Video)</p>
+        </a>
+      </div></div>
+  </div>
+
+  <!-- Adsterra Ad Code -->
+<!-- Sixth Ad Container (Custom IFrame Setup) -->
+    <div class="ad-container">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '25967d8ceaeff5ab5fa0eba123f2df18',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//axisdoctrine.com/25967d8ceaeff5ab5fa0eba123f2df18/invoke.js"></script>
+         <p class="ad-text">Advertisement</p>
+    </div>
+</div>
+
+<script>
+  const apiKey = 'AIzaSyB8Z2g9N8VrPycbFVj4utcig69gkPT5ZJw'; // Replace with your API key
+  const channelId = 'UCowmIx_sYZ6qi8PtaAtCGUg'; // Replace with your channel ID
+  const videoList = document.getElementById('video-list');
+  let videoCache = []; // Cache to store fetched videos
+  let currentIndex = 0; // Index to track the current set of videos
+  const maxResults = 4; // Number of videos to display at a time
+  const slideInterval = 2 * 60 * 1000; // 2 minutes in milliseconds
+
+  // Fetch videos sorted by view count
+  async function fetchVideos() {
+    const url = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&type=video&order=viewCount&maxResults=50`;
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      videoCache = data.items; // Store videos in the cache
+      displayVideos(); // Display the first set of videos
+    } catch (error) {
+      console.error('Error fetching videos:', error);
+    }
+  }
+
+  // Display a set of videos based on the current index
+  function displayVideos() {
+    videoList.innerHTML = ''; // Clear previous content
+    const videosToShow = videoCache.slice(currentIndex, currentIndex + maxResults);
+
+    videosToShow.forEach(video => {
+      const videoId = video.id.videoId;
+      const thumbnail = video.snippet.thumbnails.medium.url;
+      const title = video.snippet.title;
+      const videoLink = `https://www.youtube.com/watch?v=${videoId}`;
+
+      const videoCard = document.createElement('div');
+      videoCard.style.width = '200px';
+      videoCard.innerHTML = `
+        <a href="${videoLink}" target="_blank" style="text-decoration: none; color: inherit;">
+          <img src="${thumbnail}" alt="${title}" style="width: 100%; border-radius: 5px;">
+          <p style="font-size: 14px; margin: 5px 0;">${title}</p>
+        </a>
+      `;
+      videoList.appendChild(videoCard);
+    });
+
+    // Update the current index for the next set
+    currentIndex = (currentIndex + maxResults) % videoCache.length;
+  }
+
+  // Automatically rotate videos every 2 minutes
+  function startSlideshow() {
+    setInterval(displayVideos, slideInterval);
+  }
+
+  fetchVideos(); // Fetch videos from YouTube
+  startSlideshow(); // Start the slideshow
+</script>
+
+<div>
+ <!-- Fifth Ad Container (Custom IFrame Setup) -->
+    <div class="ad-container">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '1595f07c3ca20818c30f066a55c8028b',
+                'format' : 'iframe',
+                'height' : 60,
+                'width' : 468,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//axisdoctrine.com/1595f07c3ca20818c30f066a55c8028b/invoke.js"></script>
+         <p class="ad-text">Advertisement</p>
+    </div>
+    
+    <h1>Media Gallery</h1>
+
+    <div id="media-gallery">
+                                <div class="media-container" id="media-0" style="display: block;">
+                <p>Date: 30.11.2024 | Time: 12:05</p>
+                
+                                    <!-- Video Display -->
+                    <video width="320" height="240" controls="">
+                        <source src="https://creativepulse.42web.io/cps/uploads/other/file_5fk4w7d93j628tg10resyhu.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                            </div>
+                                <div class="media-container" id="media-1" style="display: none;">
+                <p>Date: 03.01.2025 | Time: 12:48</p>
+                
+                                    <!-- Video Display -->
+                    <video width="320" height="240" controls="">
+                        <source src="https://creativepulse.42web.io/cps/uploads/other/file_8t5y6wg71urh2jk49ds30fe.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                            </div>
+                                <div class="media-container" id="media-2" style="display: none;">
+                <p>Date: 03.01.2025 | Time: 12:35</p>
+                
+                                    <!-- Image Display -->
+                    <img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Image" width="320" height="240">
+                            </div>
+            </div>
+
+    <div id="media-controls">
+        <button id="prev-media" onclick="navigateMedia('prev')" disabled="">Previous</button>
+        <span id="nav-message" style="color: gray;">You are at the first media.</span> <!-- Message to indicate when we're at the start/end -->
+        <button id="next-media" onclick="navigateMedia('next')">Next</button>
+    </div>
+
+
+<script>
+    let currentMediaIndex = 0;
+    const totalMedia = 3; // Total number of videos or media items
+
+    function navigateMedia(direction) {
+        // Hide the current media
+        document.getElementById('media-' + currentMediaIndex).style.display = 'none';
+
+        // Update the index based on the direction
+        if (direction === 'next') {
+            currentMediaIndex = (currentMediaIndex + 1) % totalMedia; // Loop back to the first media
+        } else if (direction === 'prev') {
+            currentMediaIndex = (currentMediaIndex - 1 + totalMedia) % totalMedia; // Loop back to the last media
+        }
+
+        // Show the new media
+        document.getElementById('media-' + currentMediaIndex).style.display = 'block';
+
+        // Update button states
+        updateButtonState();
+    }
+
+    function updateButtonState() {
+        // Disable previous button if at the first media
+        if (currentMediaIndex === 0) {
+            document.getElementById('prev-media').disabled = true;
+        } else {
+            document.getElementById('prev-media').disabled = false;
+        }
+
+        // Disable next button if at the last media
+        if (currentMediaIndex === totalMedia - 1) {
+            document.getElementById('next-media').disabled = true;
+        } else {
+            document.getElementById('next-media').disabled = false;
+        }
+
+        // Show a message when at the beginning or end
+        const navMessage = document.getElementById('nav-message');
+        if (currentMediaIndex === 0) {
+            navMessage.textContent = 'You are at the first media.';
+            navMessage.style.color = 'gray';
+        } else if (currentMediaIndex === totalMedia - 1) {
+            navMessage.textContent = 'You are at the last media.';
+            navMessage.style.color = 'gray';
+        } else {
+            navMessage.textContent = ''; // No message when in the middle
+        }
+    }
+
+    // Initialize button state and message when the page loads
+    updateButtonState();
+</script>
+
+
+    
+
+
+</div>
+
+
+<!-- Seventh Ad Container (Custom IFrame Setup with 300x160) -->
+    <div class="ad-container">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : 'bbd391747009a0dd43df999b342d1b9b',
+                'format' : 'iframe',
+                'height' : 300,
+                'width' : 160,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//axisdoctrine.com/bbd391747009a0dd43df999b342d1b9b/invoke.js"></script>
+         <p class="ad-text">Advertisement</p>
+    </div>
+
+
+    <!-- Recent Posts Section -->
+    <div class="row mt-3">
+        <h5><i class="fa fa-list"></i> Recent Posts</h5>
+
+        
+                        <div class="col-md-4 mb-3"> 
+                            <div class="card shadow-sm">
+                                <a href="https://creativepulse.42web.io/cps/post?name=designs--77027">
+                                    <img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Designs " class="card-img-top" width="100%" height="208em">
+                                </a>
+                                <div class="card-body">
+                                    <a href="https://creativepulse.42web.io/cps/post?name=designs--77027"><h6 class="card-title">Designs </h6></a>
+                                    <p class="card-text"><small class="text-muted">
+                                    <i class="fas fa-calendar"></i> 04.01.2025, 12:01</small></p>
+                                    <a href="https://creativepulse.42web.io/cps/post?name=designs--77027" class="btn btn-sm btn-outline-dark">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3"> 
+                            <div class="card shadow-sm">
+                                <a href="https://creativepulse.42web.io/cps/post?name=mclwsh-52641">
+                                    <img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="MCLWSH" class="card-img-top" width="100%" height="208em">
+                                </a>
+                                <div class="card-body">
+                                    <a href="https://creativepulse.42web.io/cps/post?name=mclwsh-52641"><h6 class="card-title">MCLWSH</h6></a>
+                                    <p class="card-text"><small class="text-muted">
+                                    <i class="fas fa-calendar"></i> 04.01.2025, 11:57</small></p>
+                                    <a href="https://creativepulse.42web.io/cps/post?name=mclwsh-52641" class="btn btn-sm btn-outline-dark">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3"> 
+                            <div class="card shadow-sm">
+                                <a href="https://creativepulse.42web.io/cps/post?name=briars-18817">
+                                    <img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="BRIARS" class="card-img-top" width="100%" height="208em">
+                                </a>
+                                <div class="card-body">
+                                    <a href="https://creativepulse.42web.io/cps/post?name=briars-18817"><h6 class="card-title">BRIARS</h6></a>
+                                    <p class="card-text"><small class="text-muted">
+                                    <i class="fas fa-calendar"></i> 04.01.2025, 11:55</small></p>
+                                    <a href="https://creativepulse.42web.io/cps/post?name=briars-18817" class="btn btn-sm btn-outline-dark">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3"> 
+                            <div class="card shadow-sm">
+                                <a href="https://creativepulse.42web.io/cps/post?name=designs--52616">
+                                    <img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Designs " class="card-img-top" width="100%" height="208em">
+                                </a>
+                                <div class="card-body">
+                                    <a href="https://creativepulse.42web.io/cps/post?name=designs--52616"><h6 class="card-title">Designs </h6></a>
+                                    <p class="card-text"><small class="text-muted">
+                                    <i class="fas fa-calendar"></i> 04.01.2025, 10:42</small></p>
+                                    <a href="https://creativepulse.42web.io/cps/post?name=designs--52616" class="btn btn-sm btn-outline-dark">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3"> 
+                            <div class="card shadow-sm">
+                                <a href="https://creativepulse.42web.io/cps/post?name=designs-57073">
+                                    <img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Designs" class="card-img-top" width="100%" height="208em">
+                                </a>
+                                <div class="card-body">
+                                    <a href="https://creativepulse.42web.io/cps/post?name=designs-57073"><h6 class="card-title">Designs</h6></a>
+                                    <p class="card-text"><small class="text-muted">
+                                    <i class="fas fa-calendar"></i> 04.01.2025, 10:07</small></p>
+                                    <a href="https://creativepulse.42web.io/cps/post?name=designs-57073" class="btn btn-sm btn-outline-dark">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3"> 
+                            <div class="card shadow-sm">
+                                <a href="https://creativepulse.42web.io/cps/post?name=designs-62578">
+                                    <img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Designs" class="card-img-top" width="100%" height="208em">
+                                </a>
+                                <div class="card-body">
+                                    <a href="https://creativepulse.42web.io/cps/post?name=designs-62578"><h6 class="card-title">Designs</h6></a>
+                                    <p class="card-text"><small class="text-muted">
+                                    <i class="fas fa-calendar"></i> 04.01.2025, 10:04</small></p>
+                                    <a href="https://creativepulse.42web.io/cps/post?name=designs-62578" class="btn btn-sm btn-outline-dark">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3"> 
+                            <div class="card shadow-sm">
+                                <a href="https://creativepulse.42web.io/cps/post?name=designs--25748">
+                                    <img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Designs " class="card-img-top" width="100%" height="208em">
+                                </a>
+                                <div class="card-body">
+                                    <a href="https://creativepulse.42web.io/cps/post?name=designs--25748"><h6 class="card-title">Designs </h6></a>
+                                    <p class="card-text"><small class="text-muted">
+                                    <i class="fas fa-calendar"></i> 04.01.2025, 09:42</small></p>
+                                    <a href="https://creativepulse.42web.io/cps/post?name=designs--25748" class="btn btn-sm btn-outline-dark">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3"> 
+                            <div class="card shadow-sm">
+                                <a href="https://creativepulse.42web.io/cps/post?name=designs--65285">
+                                    <img src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Designs " class="card-img-top" width="100%" height="208em">
+                                </a>
+                                <div class="card-body">
+                                    <a href="https://creativepulse.42web.io/cps/post?name=designs--65285"><h6 class="card-title">Designs </h6></a>
+                                    <p class="card-text"><small class="text-muted">
+                                    <i class="fas fa-calendar"></i> 04.01.2025, 09:39</small></p>
+                                    <a href="https://creativepulse.42web.io/cps/post?name=designs--65285" class="btn btn-sm btn-outline-dark">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+    </div>
+    <!-- Eighth Ad Container (Custom IFrame Setup with 250x300) -->
+    <div class="ad-container">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '7e454e5fd33d0e40df5ff6215a231176',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//axisdoctrine.com/7e454e5fd33d0e40df5ff6215a231176/invoke.js"></script>
+         <p class="ad-text">Advertisement</p>
+    </div>
+     <!-- Third Ad Container (URL Link) -->
+    <div class="ad-container">
+        <script type="text/javascript">
+	atOptions = {
+		'key' : '1595f07c3ca20818c30f066a55c8028b',
+		'format' : 'iframe',
+		'height' : 60,
+		'width' : 468,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//axisdoctrine.com/1595f07c3ca20818c30f066a55c8028b/invoke.js"></script>
+ <p class="ad-text">Advertisement</p>
+    </div>
+</div>
+
+
+			<div id="sidebar" class="col-md-4">
+
+				<div class="card">
+					<div class="card-header"><i class="fas fa-list"></i> Categories</div>
+					<div class="card-body">
+						<ul class="list-group">
+
+							<a href="https://creativepulse.42web.io/cps/category?name=graphic-design">
+								<li class="list-group-item d-flex justify-content-between align-items-center">
+									Graphic Design
+									<span class="badge bg-secondary rounded-pill">5</span>
+								</li>
+							</a>
+		
+							<a href="https://creativepulse.42web.io/cps/category?name=site-news">
+								<li class="list-group-item d-flex justify-content-between align-items-center">
+									Site News
+									<span class="badge bg-secondary rounded-pill">6</span>
+								</li>
+							</a>
+		
+							<a href="https://creativepulse.42web.io/cps/category?name=videos">
+								<li class="list-group-item d-flex justify-content-between align-items-center">
+									Videos
+									<span class="badge bg-secondary rounded-pill">0</span>
+								</li>
+							</a>
+								</ul>
+					</div>
+				</div>
+				
+				<div class="card mt-3">
+					<div class="card-header">
+						<ul class="nav nav-tabs card-header-tabs nav-justified">
+							<li class="nav-item active">
+								<a class="nav-link active" href="#popular" data-bs-toggle="tab">
+									Popular Posts
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#commentss" data-bs-toggle="tab">
+									Recent Comments
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="card-body">
+						<div class="tab-content">
+							<div id="popular" class="tab-pane fade show active">
+       
+								<div class="mb-2 d-flex flex-start align-items-center bg-light rounded">
+									<a href="https://creativepulse.42web.io/cps/post?name=designs-57073" class="ms-1">
+										<img class="rounded shadow-1-strong me-1" src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Designs" width="70" height="70">
+									</a>
+									<div class="mt-2 mb-2 ms-1 me-1">
+										<h6 class="text-primary mb-1">
+											<a href="https://creativepulse.42web.io/cps/post?name=designs-57073">Designs</a>
+										</h6>
+										<p class="text-muted small mb-0">
+											<i class="fas fa-calendar"></i> 04.01.2025, 10:07<br>
+                                            <i class="fa fa-comments"></i> Comments: 
+												<a href="https://creativepulse.42web.io/cps/post?name=designs-57073#comments">
+													<b>0</b>
+												</a>
+										</p>
+									</div>
+								</div>
+       
+								<div class="mb-2 d-flex flex-start align-items-center bg-light rounded">
+									<a href="https://creativepulse.42web.io/cps/post?name=designs--53117" class="ms-1">
+										<img class="rounded shadow-1-strong me-1" src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Designs " width="70" height="70">
+									</a>
+									<div class="mt-2 mb-2 ms-1 me-1">
+										<h6 class="text-primary mb-1">
+											<a href="https://creativepulse.42web.io/cps/post?name=designs--53117">Designs </a>
+										</h6>
+										<p class="text-muted small mb-0">
+											<i class="fas fa-calendar"></i> 04.01.2025, 09:37<br>
+                                            <i class="fa fa-comments"></i> Comments: 
+												<a href="https://creativepulse.42web.io/cps/post?name=designs--53117#comments">
+													<b>0</b>
+												</a>
+										</p>
+									</div>
+								</div>
+       
+								<div class="mb-2 d-flex flex-start align-items-center bg-light rounded">
+									<a href="https://creativepulse.42web.io/cps/post?name=designs-29778" class="ms-1">
+										<img class="rounded shadow-1-strong me-1" src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="Designs" width="70" height="70">
+									</a>
+									<div class="mt-2 mb-2 ms-1 me-1">
+										<h6 class="text-primary mb-1">
+											<a href="https://creativepulse.42web.io/cps/post?name=designs-29778">Designs</a>
+										</h6>
+										<p class="text-muted small mb-0">
+											<i class="fas fa-calendar"></i> 04.01.2025, 09:36<br>
+                                            <i class="fa fa-comments"></i> Comments: 
+												<a href="https://creativepulse.42web.io/cps/post?name=designs-29778#comments">
+													<b>0</b>
+												</a>
+										</p>
+									</div>
+								</div>
+       
+								<div class="mb-2 d-flex flex-start align-items-center bg-light rounded">
+									<a href="https://creativepulse.42web.io/cps/post?name=briars-18817" class="ms-1">
+										<img class="rounded shadow-1-strong me-1" src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="BRIARS" width="70" height="70">
+									</a>
+									<div class="mt-2 mb-2 ms-1 me-1">
+										<h6 class="text-primary mb-1">
+											<a href="https://creativepulse.42web.io/cps/post?name=briars-18817">BRIARS</a>
+										</h6>
+										<p class="text-muted small mb-0">
+											<i class="fas fa-calendar"></i> 04.01.2025, 11:55<br>
+                                            <i class="fa fa-comments"></i> Comments: 
+												<a href="https://creativepulse.42web.io/cps/post?name=briars-18817#comments">
+													<b>0</b>
+												</a>
+										</p>
+									</div>
+								</div>
+							</div>
+							<div id="commentss" class="tab-pane fade">
+
+								<div class="mb-2 d-flex flex-start align-items-center bg-light rounded border">
+									<a href="https://creativepulse.42web.io/cps/post?name=designs--77027#comments" class="ms-2">
+										<img class="rounded-circle shadow-1-strong me-2" src="data:text/html; charset=utf-8;base64,NDI5IFRvbyBNYW55IFJlcXVlc3RzIC0gU2Nhbm5lciBhY3Rpdml0eSBkZXRlY3RlZAo=" alt="admin" width="60" height="60">
+									</a>
+									<div class="mt-1 mb-1 ms-1 me-1">
+										<h6 class="text-primary mb-1">
+											<a href="https://creativepulse.42web.io/cps/post?name=designs--77027#comments">admin</a>
+										</h6>
+										<p class="text-muted small mb-0">
+											on <a href="https://creativepulse.42web.io/cps/post?name=designs--77027#comments">Designs </a><br>
+											<i class="fas fa-calendar"></i> 25.03.2025, 05:55
+										</p>
+									</div>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				
+				<div class="p-4 mt-3 bg-body-tertiary rounded text-dark">
+					<h6><i class="fas fa-envelope-open-text"></i> Subscribe</h6><hr>
+					
+					<p class="mb-3">Get the latest news and exclusive offers</p>
+					
+					<form action="" method="POST">
+						<div class="input-group">
+							<input type="email" class="form-control" placeholder="E-Mail Address" name="email" required="">
+							<span class="input-group-btn">
+								<button class="btn btn-primary" type="submit" name="subscribe">Subscribe</button>
+							</span>
+						</div>
+					</form>
+				</div>
+
+	
+				<div class="card mt-3">
+					  <div class="card-header">Text Widget</div>
+					  <div class="card-body">
+						<p><strong>Welcome to Creative Pulse Solutions</strong></p>
+
+<p>At Creative Pulse Solutions, we are dedicated to transforming ideas into innovative digital experiences. Our team is passionate about delivering creative solutions that cater to your business needs, whether it’s through professional web design, personalized content creation, or advanced technology services. We specialize in providing high-quality services for businesses and individuals, ensuring that every project meets the highest standards of excellence.</p>
+
+<p>Explore our range of services today, from custom websites and e-commerce solutions to unique content creation and digital marketing strategies. Let us help you make your digital presence shine!</p>
+
+					  </div>
+				</div>
+	
+				<div class="card mt-3">
+					  <div class="card-header">🌟 Creative Pulse Solutions | ⚽ Football Predictions, 🎨 Motion Designs &amp; More 🚀</div>
+					  <div class="card-body">
+						<p>&nbsp;</p>
+
+<p>🌟 New Features:</p>
+
+<p>&nbsp;</p>
+
+<p>⚽ Football Predictions: Stay ahead with our accurate football predictions and betting tips.</p>
+
+<p>&nbsp;</p>
+
+<p>📰 Football News: Get the latest updates, scores, and news from the football world.</p>
+
+<p>&nbsp;</p>
+
+<p>📊 Insights &amp; Analytics: Access in-depth analysis to make informed decisions on your bets.</p>
+
+<p>&nbsp;</p>
+
+<p>🤖 AI Chat Bot: Our friendly AI chat bot is here to assist you 24/7 with your queries and services.</p>
+
+<p>&nbsp;</p>
+
+<p>🔍 Explore More: Dive into additional features, explore tips, articles, and exclusive content!</p>
+
+<p>&nbsp;</p>
+
+<p>📱 User-Friendly Interface: Easy navigation and a responsive design that works across all devices.</p>
+
+<p>&nbsp;</p>
+
+<p>🎁 Special Offers &amp; Discounts: Grab limited-time promotions and discounts on our premium services.</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>---</p>
+
+<p>&nbsp;</p>
+
+<p>🌐 Visit Us:</p>
+
+<p>&nbsp;</p>
+
+<p>Creative Pulse Solutions</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>---</p>
+
+<p>&nbsp;</p>
+
+<p>📝 Copyright:</p>
+
+<p>&nbsp;</p>
+
+<p>© 2024 Creative Pulse Solutions. All rights reserved.</p>
+
+					  </div>
+				</div>
+			</div>
+		
+		</div>
+	</div>
+	
+	<footer class="footer border-top bg-dark text-light px-4 py-3 mt-3">
+		<div class="row">
+			<div class="col-md-2 mb-3">
+				<p class="d-block">© 2026 CPS</p>
+				<p><a href="https://creativepulse.42web.io/cps/rss" target="_blank"><i class="fas fa-rss-square"></i> RSS Feed</a></p>
+				<p><a href="https://creativepulse.42web.io/cps/sitemap" target="_blank"><i class="fas fa-sitemap"></i> XML Sitemap</a></p>
+				<p class="d-block small">
+					<a href="https://youtube.com/@emmanuelkirui9043" target="_blank"><i>Powered by <b>Creative Pulse Solutions v2.2</b></i></a>
+				</p>
+			</div>
+			<div class="col-md-6 mb-3">
+				<h5><i class="fa fa-info-circle"></i> About</h5>
+Creative Pulse Solutions			</div>
+			<div class="col-md-4 mb-3">
+  <h5><i class="fa fa-envelope"></i> Contact</h5>
+  <div class="col-12 d-flex flex-wrap gap-2">
+    <a href="mailto:emmanuelkirui042@gmail.com" target="_blank" class="btn btn-secondary">
+      <strong><i class="fa fa-envelope"></i><span>&nbsp; emmanuelkirui042@gmail.com</span></strong>
+    </a>
+          <a href="https://web.facebook.com/emmanuelkirui042/" target="_blank" class="btn btn-primary">
+        <strong><i class="fab fa-facebook-square"></i>&nbsp; Facebook</strong>
+      </a>
+              <a href="https://www.instagram.com/emmanuelkirui042/" target="_blank" class="btn btn-warning">
+        <strong><i class="fab fa-instagram"></i>&nbsp; Instagram</strong>
+      </a>
+              <a href="https://twitter.com/Emmanue44733690" target="_blank" class="btn btn-info">
+        <strong><i class="fab fa-twitter-square"></i>&nbsp; Twitter</strong>
+      </a>
+              <a href="https://www.youtube.com/@emmanuelkirui9043" target="_blank" class="btn btn-danger">
+        <strong><i class="fab fa-youtube-square"></i>&nbsp; YouTube</strong>
+      </a>
+              <a href="https://www.tiktok.com/@emmanuelkirui3" target="_blank" class="btn btn-primary">
+        <strong><i class="fab fa-tiktok"></i>&nbsp; Tiktok</strong>
+      </a>
+      </div>
+</div>
+
+					</div>
+					<div class="scroll-btn"><div class="scroll-btn-arrow"></div></div>
+			
+		
+	</footer>
+
+
+
+
+
+    <script src="https://creativepulse.42web.io/cps/js/jquery.min.js"></script>
+    <script src="https://creativepulse.42web.io/cps/js/bootstrap.min.js"></script>
+    <script>
+    // Hide the preloader once the page has loaded
+    window.addEventListener('load', function () {
+        const preloader = document.getElementById('preloader');
+        preloader.style.display = 'none';
+    });
+</script>
+<script>
+    function toggleChatButton() {
+        const chatButton = document.querySelector('.chat-button');
+
+        if (chatButton) {
+            // Hide the chat button
+            chatButton.style.opacity = '0';
+
+            // Reappear after 5 seconds
+            setTimeout(() => {
+                chatButton.style.opacity = '1';
+            }, 30000);
+        }
+    }
+
+    // Make the button disappear and reappear every 10 seconds
+    setInterval(toggleChatButton, 10000);
+</script>
+
+
+
+<iframe name="oauth2relay535283822" id="oauth2relay535283822" src="https://accounts.google.com/o/oauth2/postmessageRelay?parent=https%3A%2F%2Fcreativepulse.42web.io&amp;jsh=m%3B%2F_%2Fscs%2Fabc-static%2F_%2Fjs%2Fk%3Dgapi.lb.en.ch0Jz-JlMrQ.O%2Fd%3D1%2Frs%3DAHpOoo_YD4KoV8fTh_kLhktsiThAm3yJ5A%2Fm%3D__features__#rpctoken=393587979&amp;forcesecure=1" tabindex="-1" aria-hidden="true" style="width: 1px; height: 1px; position: absolute; top: -100px;"></iframe></body></html><!-- JavaScript Links -->
