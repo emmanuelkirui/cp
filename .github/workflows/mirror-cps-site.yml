@@ -22,6 +22,29 @@ jobs:
       - name: Install dependencies
         run: npm install puppeteer
 
+      - name: Get current runner IP
+        id: runner_ip
+        run: echo "ip=$(curl -s https://api.ipify.org)" >> $GITHUB_OUTPUT
+
+      - name: Update .htaccess to allow only this runner IP
+        run: |
+          RUNNER_IP="${{ steps.runner_ip.outputs.ip }}"
+          echo "Runner IP: $RUNNER_IP"
+
+          cat > cps/.htaccess << EOF
+          Options +Indexes
+
+          # Block everyone by default
+          Order Deny,Allow
+          Deny from all
+
+          # Allow only the current GitHub Actions runner
+          Allow from $RUNNER_IP
+          EOF
+
+          echo ".htaccess written:"
+          cat cps/.htaccess
+
       - name: Crawl and mirror /cps/ directory
         run: |
           node << 'EOF'
@@ -35,7 +58,6 @@ jobs:
           const queue   = [BASE];
 
           function urlToFilePath(urlStr) {
-            // Strip base, normalize slashes
             let rel = urlStr.replace(BASE, '');
             rel = rel.split('?')[0].split('#')[0];
             if (!rel || rel.endsWith('/')) rel += 'index.html';
@@ -51,7 +73,6 @@ jobs:
                   const r = await fetch(link.href, { mode: 'cors' });
                   if (!r.ok) continue;
                   let css = await r.text();
-                  // Inline woff2 fonts
                   const fontUrls = [...css.matchAll(/url\(['"]?(https?:\/\/[^'")\s]+\.woff2[^'")\s]*)['"']?\)/g)].map(m => m[1]);
                   for (const fu of fontUrls) {
                     try {
@@ -129,7 +150,6 @@ jobs:
                 await page.evaluate(() => document.fonts.ready);
                 await new Promise(r => setTimeout(r, 3000));
 
-                // Collect links BEFORE rewriting URLs
                 const links = await getInternalLinks(page);
                 console.log('  Found links:', links.length);
                 links.forEach(l => { if (!visited.has(l)) queue.push(l); });
@@ -138,8 +158,6 @@ jobs:
                 await rewriteRelativeURLs(page);
 
                 let html = await page.content();
-
-                // Inject AdSense
                 html = html.replace('</head>',
                   '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9638774372490271" crossorigin="anonymous"></script>\n</head>'
                 );
@@ -158,25 +176,31 @@ jobs:
 
             await browser.close();
 
-            // Root redirect
             fs.writeFileSync('index.html',
               '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=cps/index.html">' +
               '<title>Redirecting...</title></head><body><a href="cps/index.html">Enter site</a></body></html>'
             );
 
             console.log('\n=== Crawl complete. Pages visited:', visited.size, '===');
-
-            // List what was saved
-            const saved = fs.readdirSync(OUT);
-            console.log('Files in ./cps:', saved);
-
           })().catch(e => { console.error('Fatal:', e); process.exit(1); });
           EOF
+
+      - name: Lock .htaccess — block all after crawl
+        run: |
+          mkdir -p cps
+          cat > cps/.htaccess << 'EOF'
+          Options +Indexes
+
+          # Block all public access to directory listing
+          Order Deny,Allow
+          Deny from all
+          EOF
+          echo ".htaccess locked (all blocked)"
 
       - name: Verify output
         run: |
           echo "--- Directory listing ---"
-          find ./cps -type f | head -50
+          find ./cps -name '*.html' | head -50
           COUNT=$(find ./cps -name '*.html' | wc -l)
           echo "HTML files mirrored: $COUNT"
           if [ "$COUNT" -lt 1 ]; then
