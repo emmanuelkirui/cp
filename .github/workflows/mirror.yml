@@ -1,0 +1,179 @@
+name: Mirror All Sites
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Puppeteer
+        run: npm install puppeteer
+
+      - name: Write mirror script
+        run: |
+          cat > mirror.js << 'EOF'
+          const puppeteer = require('puppeteer');
+          const fs = require('fs');
+
+          const ORIGIN    = 'https://creativepulse.42web.io/cps/';
+          const GH_DOMAIN = 'https://emmanuelkirui.github.io';
+          const ADS_TAG   = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9638774372490271" crossorigin="anonymous"></script>';
+
+          const PAGES = [
+            { url: ORIGIN + 'port_kirui.php', output: 'index.html'   },
+            // { url: ORIGIN + 'liv.php',        output: 'liv.html'     },
+            // { url: ORIGIN + 'valmanu.php',    output: 'valmanu.html' },
+            { url: ORIGIN,                    output: 'home.html'    },
+          ];
+
+          const URL_MAP = {
+            [ORIGIN + 'port_kirui.php']: GH_DOMAIN + '/index.html',
+            [ORIGIN + 'liv.php']:        GH_DOMAIN + '/liv.html',
+            [ORIGIN + 'valmanu.php']:    GH_DOMAIN + '/valmanu.html',
+            [ORIGIN]:                    GH_DOMAIN + '/home.html',
+          };
+
+          async function mirrorPage(browser, url, output) {
+            const page = await browser.newPage();
+            await page.setViewport({ width: 1280, height: 800 });
+            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
+            await page.setExtraHTTPHeaders({
+              'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+              'Accept-Language': 'en-US,en;q=0.9',
+              'Cache-Control': 'no-cache',
+            });
+
+            console.log('Navigating to', url, '...');
+            await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
+            await page.evaluate(() => document.fonts.ready);
+            await new Promise(r => setTimeout(r, 6000));
+
+            // Inline ALL external CSS + woff2 fonts as base64
+            await page.evaluate(async () => {
+              const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+              for (const link of links) {
+                try {
+                  const resp = await fetch(link.href, { mode: 'cors' });
+                  if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                  let css = await resp.text();
+                  const fontUrls = [...css.matchAll(/url\(['"']?(https?:\/\/[^'"')]+\.woff2[^'"')]*)['"']?\)/g)].map(m => m[1]);
+                  for (const fontUrl of fontUrls) {
+                    try {
+                      const fr = await fetch(fontUrl);
+                      const buf = await fr.arrayBuffer();
+                      const b64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
+                      css = css.replace(fontUrl, 'data:font/woff2;base64,' + b64);
+                    } catch(fe) { console.warn('Could not inline font:', fontUrl); }
+                  }
+                  const style = document.createElement('style');
+                  style.textContent = css;
+                  link.parentNode.replaceChild(style, link);
+                  console.log('Inlined:', link.href);
+                } catch(e) { console.warn('Could not inline stylesheet:', link.href, e.message); }
+              }
+            });
+
+            // Inline images from 42web.io as base64
+            await page.evaluate(async (origin) => {
+              const imgs = Array.from(document.querySelectorAll('img[src]'));
+              for (const img of imgs) {
+                const src = img.getAttribute('src');
+                const fullSrc = src.startsWith('http') ? src : origin + src.replace(/^\//, '');
+                if (!fullSrc.includes('42web.io')) continue;
+                try {
+                  const resp = await fetch(fullSrc);
+                  const buf = await resp.arrayBuffer();
+                  const mime = resp.headers.get('content-type') || 'image/jpeg';
+                  const b64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
+                  img.setAttribute('src', 'data:' + mime + ';base64,' + b64);
+                } catch(e) { console.warn('Could not inline image:', fullSrc); }
+              }
+            }, ORIGIN);
+
+            // Rewrite internal links + fix relative URLs
+            await page.evaluate((urlMap, origin) => {
+              document.querySelectorAll('[src],[href],[action]').forEach(el => {
+                ['src','href','action'].forEach(attr => {
+                  const val = el.getAttribute(attr);
+                  if (!val) return;
+                  if (urlMap[val]) { el.setAttribute(attr, urlMap[val]); return; }
+                  if (!val.startsWith('http') && !val.startsWith('//') && !val.startsWith('#') && !val.startsWith('mailto:') && !val.startsWith('tel:') && !val.startsWith('data:') && !val.startsWith('javascript:')) {
+                    el.setAttribute(attr, origin + val);
+                  }
+                });
+              });
+            }, URL_MAP, ORIGIN);
+
+            let html = await page.content();
+            html = html.replace('</head>', ADS_TAG + '\n</head>');
+
+            console.log(output, 'size:', html.length, 'bytes');
+            fs.writeFileSync(output, html);
+            await page.close();
+          }
+
+          (async () => {
+            const browser = await puppeteer.launch({
+              args: ['--no-sandbox', '--disable-setuid-sandbox']
+            });
+            for (let i = 0; i < PAGES.length; i++) {
+              if (i > 0) {
+                console.log('Waiting 15s before next page to avoid rate limiting...');
+                await new Promise(r => setTimeout(r, 15000));
+              }
+              let attempts = 0;
+              while (attempts < 3) {
+                try {
+                  await mirrorPage(browser, PAGES[i].url, PAGES[i].output);
+                  break;
+                } catch(e) {
+                  attempts++;
+                  console.warn('Attempt', attempts, 'failed for', PAGES[i].url, e.message);
+                  if (attempts < 3) {
+                    console.log('Retrying in 20s...');
+                    await new Promise(r => setTimeout(r, 20000));
+                  } else { throw e; }
+                }
+              }
+            }
+            await browser.close();
+            console.log('All pages done.');
+          })().catch(e => { console.error(e); process.exit(1); });
+          EOF
+
+      - name: Run mirror script
+        run: node mirror.js
+
+      - name: Verify file sizes
+        run: |
+          for f in index.html home.html; do
+            SIZE=$(wc -c < $f)
+            echo "$f size: $SIZE bytes"
+            if [ "$SIZE" -lt 10000 ]; then
+              echo "ERROR: $f too small, fetch likely failed"
+              cat $f
+              exit 1
+            fi
+          done
+          echo "All files OK"
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html home.html
+          git diff --cached --quiet || git commit -m "Mirror update $(date -u '+%Y-%m-%d %H:%M')"
+          git push
