@@ -778,17 +778,7 @@ footer .footer-brand{font-family:var(--font-head);font-size:1.1rem;font-weight:7
 }
 
 </style>
-<script>
-      function _absUrl(src) {
-        if (!src) return src;
-        if (src.match(/^https?:\/\//)) return src;
-        var m = src.match(/uploads\/([^?#\s]+)/);
-        if (m) return 'https://emmanuelkirui.github.io/uploads/' + m[1];
-        var a = document.createElement('a');
-        a.href = src;
-        return a.href;
-      }
-    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 <script>
 if(typeof pdfjsLib!=='undefined'){
   pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
@@ -818,7 +808,7 @@ if(typeof pdfjsLib!=='undefined'){
     <li><a href="#contact">Contact</a></li>
   </ul>
   <div class="nav-right">
-    <a href="https://emmanuelkirui.github.io/admin.html" class="nav-admin"><i class="fas fa-lock"></i> Admin</a>
+    <a href="https://creativepulse.42web.io/cps/admin.php" class="nav-admin"><i class="fas fa-lock"></i> Admin</a>
     <button class="hamburger" onclick="document.getElementById('mobileNav').classList.toggle('open')">
       <i class="fas fa-bars"></i>
     </button>
