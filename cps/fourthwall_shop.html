@@ -1,0 +1,19 @@
+<!DOCTYPE html><html><head>
+<title>
+</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {background-color:#ffffff;background-repeat:no-repeat;background-position:top left;background-attachment:fixed;}
+h1{font-family:Arial, sans-serif;color:#000000;background-color:#ffffff;}
+p {font-family:Georgia, serif;font-size:14px;font-style:normal;font-weight:normal;color:#000000;background-color:#ffffff;}
+</style>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9638774372490271" crossorigin="anonymous"></script>
+</head>
+<body>
+<h1>Cookies are not enabled. </h1>
+<p>It appears your browser is not accepting cookies, please enable cookies to continue to this page, or disable 'private' web browsing mode. </p>
+<p>Instructions to enable cookies for all browsers can be found <a href="https://allaboutcookies.org/how-to-manage-cookies">HERE</a>
+
+
+
+</p></body></html>
